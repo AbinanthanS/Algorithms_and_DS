@@ -47,6 +47,7 @@ public:
 int main(){
     
     DSU ds(7);
+
     //either use UBR || UBS
     ds.UBS(1,2);
     ds.UBS(2,3);
@@ -54,7 +55,7 @@ int main(){
     ds.UBS(6,7);
     ds.UBS(5,6);
     
-//if 3 and 7 are present in a component or not
+   //if 3 and 7 are present in a component or not
 
     if (ds.FUP(3) == ds.FUP(7)) cout<<"Yes";
     else cout<<"No";
