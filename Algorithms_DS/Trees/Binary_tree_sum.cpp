@@ -19,6 +19,7 @@ Node* buildtree(vector<int> &v,int n){
   q.push(root);
   int i = 1;
   while(!q.empty() && i<n){
+
     Node* curr = q.front();
     q.pop();
     if (i<n && v[i] != -1){
@@ -32,7 +33,9 @@ Node* buildtree(vector<int> &v,int n){
       q.push(curr->right);
     }
     i++;
+
   }
+  
   return root;
 }
 
@@ -45,10 +48,10 @@ void sumofnodes(Node* root,int &sum){
 }
 
 int main(){
-  int n;
-  cin>>n;
-  vector<int> v(n);
-  for (int i = 0;i<n;i++) cin>>v[i];
+  vector<int> v;
+  int x;
+  while(cin>>x) v.push_back(x);
+  int n = v.size();
   Node* root = buildtree(v,n);
   int sum = 0;
   sumofnodes(root,sum);
