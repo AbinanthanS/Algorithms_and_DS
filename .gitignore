@@ -1,3 +1,4 @@
 .vscode
 *.exe
 /cpp_practice
+expected.txt
