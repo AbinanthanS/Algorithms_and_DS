@@ -41,12 +41,20 @@ int countleaf(Node* root){
   return 1+countleaf(root->left)+countleaf(root->right);
 }
 
+void inorder(Node* root){
+  if (root == nullptr) return;
+  inorder(root->left);
+  cout<<root->data<<" ";
+  inorder(root->right);
+}
+
 int main(){
   int n;
   cin>>n;
   vector<int> v(n);
   for (int i = 0;i<n;i++) cin>>v[i];
   Node* root = buildtree(v,n);
-  cout<<"Total Nodes: "<<countleaf(root);
+  inorder(root);
+  //cout<<"Total Nodes: "<<countleaf(root);
   return 0;
 }
