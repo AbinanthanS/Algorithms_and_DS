@@ -15,7 +15,7 @@ int func(vector<int> &v,int idx,int tar,vector<vector<int>> &dp){
 int tabulation(vector<int> &v,int k,int n){
     vector<vector<int>> dp(n,vector<int> (k+1,0));
 
-    dp[0][0] = 1;
+    for (int i = 0;i<n;i++) dp[i][0] = 1;
     if (v[0]<=k) dp[0][v[0]] = 1;
 
     for (int ind = 1;ind<n;ind++){
