@@ -2,8 +2,11 @@
 using namespace std;
 //if only arr elements greater than 0;
 int func(vector<int> &v,int idx,int tar,vector<vector<int>> &dp){
-    if (tar == 0) return 1;
-    if (idx == 0) return (v[0] == tar ? 1 : 0);
+    if (idx == 0){
+        if (tar == 0 && v[0] == 0) return 2;
+        if (tar == 0 || tar == v[0]) return 1;
+        return 0;
+    }
   
     if (dp[idx][tar] != -1) return dp[idx][tar];
     int take = 0;

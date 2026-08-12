@@ -6,7 +6,7 @@ int main(){
     vector<int> v(n);
     for (int i = 0;i<n;i++) cin>>v[i];
     vector<vector<int>> ans;
-    for (int num = 0;num<(1 << n);num++){
+    for (int num = 0;num < (1 << n);num++){
         vector<int> subset;
         for (int i = 0;i<n;i++) if (num&(1<<i)) subset.push_back(v[i]);
         ans.push_back(subset);
