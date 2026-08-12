@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-
+//if only arr elements greater than 0;
 int func(vector<int> &v,int idx,int tar,vector<vector<int>> &dp){
     if (tar == 0) return 1;
     if (idx == 0) return (v[0] == tar ? 1 : 0);
@@ -56,9 +56,9 @@ int main(){
     int tar;
     cin>>tar;
     vector<vector<int>> dp(n,vector<int> (tar+1,-1));
-    //int ans = func(arr,n-1,tar,dp);
+    int ans = func(arr,n-1,tar,dp);
     //int ans = tabulation(arr,tar,n);
-    int ans = space_optimized(arr,tar,n);
+    //int ans = space_optimized(arr,tar,n);
     cout<<ans;
     return 0;
 }
