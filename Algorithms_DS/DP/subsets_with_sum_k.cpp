@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-//if only arr elements greater than 0;
+
 int func(vector<int> &v,int idx,int tar,vector<vector<int>> &dp){
     if (idx == 0){
         if (tar == 0 && v[0] == 0) return 2;
@@ -12,14 +12,18 @@ int func(vector<int> &v,int idx,int tar,vector<vector<int>> &dp){
     int take = 0;
     if (v[idx]<=tar) take = func(v,idx-1,tar-v[idx],dp);
     int ntake = func(v,idx-1,tar,dp);
-    return take+ntake;
+    return dp[idx][tar] = take+ntake;
 }
 
 int tabulation(vector<int> &v,int k,int n){
     vector<vector<int>> dp(n,vector<int> (k+1,0));
 
-    for (int i = 0;i<n;i++) dp[i][0] = 1;
-    if (v[0]<=k) dp[0][v[0]] = 1;
+    
+    if (v[0] == 0) dp[0][0] = 2;
+    else{
+        dp[0][0] = 1;
+        if (v[0]<=k) dp[0][v[0]] = 1;
+    }
 
     for (int ind = 1;ind<n;ind++){
         for (int tar = 0;tar<=k;tar++){
@@ -36,8 +40,11 @@ int space_optimized(vector<int> &v,int k,int n){
 
     vector<int> prev(k+1,0),cur(k+1,0);
     
-    prev[0] = 1;
-    if (prev[v[0]]<=k) prev[v[0]] = 1;
+    if (v[0] == 0) prev[0] = 2;
+    else{
+        prev[0] = 1;
+        if (v[0]<=k) prev[v[0]] = 1;
+    }
 
     for (int ind = 1;ind<n;ind++){
         for (int tar = 0;tar<=k;tar++){

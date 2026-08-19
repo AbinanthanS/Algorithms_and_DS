@@ -1,23 +1,32 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int func(vector<int> &v,int idx,int k){
-   if (k == 0) return 1;
-   if (idx == 0) return (v[0] == k?1:0);
-
-   int take = 0;
-   if (v[idx]<=k) take = func(v,idx-1,k-v[idx]);
-   int ntake = func(v,idx-1,k);
-   return take+ntake;
+int func(vector<int> &v,int idx,int tar,vector<vector<int>> &dp){
+    if (idx == 0){
+        if (tar == 0 && v[0] == 0) return 2;
+        if (tar == 0 || tar == v[0]) return 1;
+        return 0;
+    }
+  
+    if (dp[idx][tar] != -1) return dp[idx][tar];
+    int take = 0;
+    if (v[idx]<=tar) take = func(v,idx-1,tar-v[idx],dp);
+    int ntake = func(v,idx-1,tar,dp);
+    return take+ntake;
 }
 
-int tabulation(vector<int> &v, int k){
-    int n = v.size();
+int tabulation(vector<int> &v,int k,int n){
     vector<vector<int>> dp(n,vector<int> (k+1,0));
-    for (int i = 0;i<n;i++) dp[i][0] = 1;
-    if (v[0]<=k) dp[0][v[0]] = 1;
+
+    
+    if (v[0] == 0) dp[0][0] = 2;
+    else{
+        dp[0][0] = 1;
+        if (v[0]<=k) dp[0][v[0]] = 1;
+    }
+
     for (int ind = 1;ind<n;ind++){
-        for (int tar = 1;tar<=k;tar++){
+        for (int tar = 0;tar<=k;tar++){
             int take = 0;
             if (v[ind]<=tar) take = dp[ind-1][tar-v[ind]];
             int ntake = dp[ind-1][tar];
@@ -26,50 +35,47 @@ int tabulation(vector<int> &v, int k){
     }
     return dp[n-1][k];
 }
-int space(vector<int> &v, int k){
-    int n = v.size();
-    vector<int> prev(k+1,0),curr(k+1,0);
+
+int space_optimized(vector<int> &v,int k,int n){
+
+    vector<int> prev(k+1,0),cur(k+1,0);
+    
     if (v[0] == 0) prev[0] = 2;
-    else prev[0] = 1;
-    if (v[0] != 0 && v[0]<=k) prev[v[0]] = 1;
+    else{
+        prev[0] = 1;
+        if (v[0]<=k) prev[v[0]] = 1;
+    }
+
     for (int ind = 1;ind<n;ind++){
-        for (int tar = 1;tar<=k;tar++){
+        for (int tar = 0;tar<=k;tar++){
             int take = 0;
             if (v[ind]<=tar) take = prev[tar-v[ind]];
             int ntake = prev[tar];
-            curr[tar] = take+ntake;
+            cur[tar] = take+ntake;
         }
-        prev = curr;
+        prev = cur;
     }
     return prev[k];
 }
+
 int main(){
-    int n,d;
-    cin>>n>>d;
-    vector<int> v(n);
-    for (int i = 0;i<n;i++) cin>>v[i];
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for (int i = 0;i<n;i++) cin>>arr[i];
+    int d;
+    cin>>d;
     int sum = 0;
-    for (int i = 0;i<n;i++) sum += v[i];
-
-    if ((sum+d)%2 != 0 || d>sum) return 0;
-
-    int k = (sum+d)/2;
-    int ans;
-    //ans = func(v,n-1,k);
-    //ans = tabulation(v, k);
-    ans = space(v, k);
+    for (auto i:arr) sum += i;
+    if (sum<d || (sum-d)%2){
+        cout<<0;
+        return 0;
+    }
+    int k = (sum-d)/2;
+    vector<vector<int>> dp(n,vector<int> (k+1,-1));
+    //int ans = func(arr,n-1,k,dp);
+    int ans = tabulation(arr,k,n);
+    //int ans = space_optimized(arr,k,n);
     cout<<ans;
+    return 0;
 }
-
-/*
-
-s1-s2 = d
-s1+s2 = total sum
-
-
-s1-d = s2
-s1+s2 = total sum
-s1+s1 = total sum + d
-2*s1 = ts + d
-
-*/
