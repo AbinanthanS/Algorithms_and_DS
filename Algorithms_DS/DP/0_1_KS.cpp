@@ -2,6 +2,7 @@
 using namespace std;
 
 int func(vector<int> &val,vector<int> &w,int idx,int cap, vector<vector<int>> &dp){
+    
     if (idx == 0){
         if (w[0]<=cap) return val[0];
         return 0;
@@ -15,6 +16,42 @@ int func(vector<int> &val,vector<int> &w,int idx,int cap, vector<vector<int>> &d
     return dp[idx][cap] = max(ntake,take);
 }         
 
+int tabulation(vector<int> &val,vector<int> &w,int cap){
+    int n = val.size();
+    vector<vector<int>> dp(n,vector<int> (cap+1,0));
+
+    for (int i = w[0];i<=cap;i++) dp[0][i] = val[0];
+
+    for (int ind = 1;ind<n;ind++){
+        for (int c = 0;c <= cap; c++){
+            int ntake = dp[ind-1][c];
+            int take = INT_MIN;
+            if (w[ind]<=c) take = val[ind]+dp[ind-1][c-w[ind]];
+            dp[ind][c] = max(ntake,take);
+        }
+    }
+    return dp[n-1][cap];
+}
+
+int space_optimized(vector<int> &val,vector<int> &w,int cap){
+    int n = val.size();
+    vector<int> prev(cap+1,0),cur(cap+1,0);
+    
+    for (int i = w[0];i<=cap;i++) prev[i] = val[0];
+
+    for (int ind = 1;ind<n;ind++){
+        for (int c = 0;c <= cap; c++){
+            int ntake = prev[c];
+            int take = INT_MIN;
+            if (w[ind]<=c) take = val[ind] + prev[c-w[ind]];
+            cur[c] = max(ntake,take);
+        }
+        prev = cur;
+    }
+    return prev[cap];
+
+}
+
 int main(){
     int n;
     cin>>n;
@@ -24,7 +61,9 @@ int main(){
     int cap;
     cin>>cap;
     vector<vector<int>> dp(n,vector<int>(cap+1,-1));
-    int ans = func(val,w,n-1,cap,dp);
+    //int ans = func(val,w,n-1,cap,dp);
+    //int ans = tabulation(val,w,cap);
+    int ans = space_optimized(val,w,cap);
     cout<<ans;
     return 0;
 }
