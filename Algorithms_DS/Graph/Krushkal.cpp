@@ -2,13 +2,10 @@
 using namespace std;
 
 class DisjointSet {
-    /* To store the ranks, parents and 
-    sizes of different set of vertices */
     vector<int> rank, parent, size;
     
 public:
 
-    // Constructor
     DisjointSet(int n) {
         rank.resize(n + 1, 0);
         parent.resize(n + 1);
@@ -19,14 +16,12 @@ public:
         }
     }
     
-    // Function to find ultimate parent
     int findUPar(int node) {
         if (node == parent[node])
             return node;
         return parent[node] = findUPar(parent[node]);
     }
     
-    // Function to implement union by rank
     void unionByRank(int u, int v) {
         int ulp_u = findUPar(u);
         int ulp_v = findUPar(v);
@@ -43,7 +38,6 @@ public:
         }
     }
     
-    // Function to implement union by size
     void unionBySize(int u, int v) {
         int ulp_u = findUPar(u);
         int ulp_v = findUPar(v);
@@ -59,53 +53,37 @@ public:
     }
 };
 
-// Solution class
 class Solution{
 public:
-
-    // Function to get the sum of weights of edges in MST
     int spanningTree(int V, vector<vector<int>> adj[]) {
         
-        // To store the edges
         vector<pair<int, pair<int, int>>> edges;
         
-        // Getting all edges from adjacency list
         for (int i = 0; i < V; i++) {
             for (auto it : adj[i]) {
-                int v = it[0]; // Node v
-                int wt = it[1]; // edge weight
-                int u = i; // Node u
+                int v = it[0]; 
+                int wt = it[1]; 
+                int u = i;
                 edges.push_back({wt, {u, v}});
             }
         }
         
-        // Creating a disjoint set of V vertices
         DisjointSet ds(V);
         
-        // Sorting the edges based on their weights
         sort(edges.begin(), edges.end());
         
-        // To store the sum of edges in MST
         int sum = 0;
         
-        // Iterate on the edges
         for (auto it : edges) {
-            int wt = it.first; // edge weight
-            int u = it.second.first; // First node
-            int v = it.second.second; // Second node
+            int wt = it.first; 
+            int u = it.second.first; 
+            int v = it.second.second;
             
-            // Join the nodes if not in the same set 
             if (ds.findUPar(u) != ds.findUPar(v)) {
-                
-                // Update the sum of edges in MST
                 sum += wt;
-                
-                // Unite the nodes 
                 ds.unionBySize(u, v);
             }
         }
-        
-        // Return the computed sum
         return sum;
     }
 };
@@ -120,7 +98,6 @@ int main() {
         {0, 3, 4}
     };
     
-    // Forming the adjacency list from edges
     vector<vector<int>> adj[4];
     for(auto it : edges) {
         int u = it[0];
@@ -131,11 +108,8 @@ int main() {
         adj[v].push_back({u, wt});
     }
     
-    // Creating instance of Solution class
     Solution sol;
     
-    /* Function call to get the sum 
-    of weights of edges in MST */
     int ans = sol.spanningTree(V, adj);
     
     cout << "The sum of weights of edges in MST is: " << ans;
